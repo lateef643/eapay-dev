@@ -85,19 +85,19 @@ module.exports = (app) => {
   //accept same parameter as the register route
   //returns error with error msg and lock the acct after five succesive wrong password for 30 mins
   //on sucess returns the merchants data
-  app.get("/api/merchant/login", (req, res) => {
+  app.post("/api/merchant/login", (req, res) => {
     const { email, password } = req.body;
     const isEmail = emailCheck(email);
     let obj = {};
-    // if (isEmail) {
-      obj = { email:"may@yah.comm" };
- /*   } else {
+     if (isEmail) {
+      obj = { email };
+    } else {
       const phone = email.length === 11 ? email.replace("0", "+234") : email;
       obj = { phone };
-    }*/
+    }
     let agent = userAgent.parse(req.headers["user-agent"]);
     let device = agent.toString();
-    Merchant.loginMerchant(obj, '123456789', device, (err, merchants, type) => {
+    Merchant.loginMerchant(obj, password, device, (err, merchants, type) => {
       if (err) return res.status(401).send(err);
       if (merchants) {
         merchants.getToken((err, merchants) => {
