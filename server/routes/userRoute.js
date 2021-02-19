@@ -3,10 +3,7 @@ require("dotenv").config();
 const request = require("request");
 const mongoose = require("mongoose");
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_SECRET_KEY;
-
-const twilio = require("twilio")(accountSid, authToken);
+const twilio = require("../utils/twilio");
 
 const User = mongoose.model("users");
 
@@ -36,33 +33,21 @@ module.exports = (app) => {
             dob: response.body.data.formatted_dob,
           });
           try {
-            twilio.verify
-              .services(process.env.TWILIO_VERIFICATION_SID)
-              .verifications.create({ to: phone, channel: "sms" });
+            twilio.twilioVerify(phone);
             data.save((err, user) => {
-              if (err)
-                return res
-                  .status(401)
-                  .json({ data: "Cant save user", success: false, err });
+              if (err) return res.status(401).send("Cant save user");
               //user data has been successfully stored in db, the user should be expecting OTP
               res.status(200).json({ data: user, success: true });
             });
           } catch (error) {
-            return res
-              .status(401)
-              .json({ data: "Error sending sms", success: false, error });
+            return res.status(401).send("Error sending sms");
           }
         } else {
           //DOB did not match
-          return res.status(401).json({
-            data: "Information Miss match",
-            success: false,
-          });
+          return res.status(401).send("Information Miss match");
         }
       } else {
-        return res
-          .status(401)
-          .json({ data: "Invalid BVN", success: false, error });
+        return res.status(401).send("Invalid BVN");
       }
     });
   });
@@ -70,20 +55,16 @@ module.exports = (app) => {
   //accept user id as url  query params
   //this is the route that receive the otp verificationn from phone
   ///api/verify?id=${id} url format
-  app.post("/api/verify", async (req, res) => {
-    console.log("verify");
+  app.post("/api/user/verify", async (req, res) => {
     const code = req.body.code;
-    const phone = req.body.phone.replace("0", "+234");
+    const phone =
+      req.body.phone.length === 11
+        ? req.body.phone.replace("0", "+234")
+        : req.body.phone;
     const id = req.query.id;
     let verificationResult;
     try {
-      verificationResult = await twilio.verify
-        .services(process.env.TWILIO_VERIFICATION_SID)
-        .verificationChecks.create({
-          code: code,
-          to: phone,
-        });
-      console.log(verificationResult);
+      verificationResult = await twilio.twilioChecks(code, phone);
     } catch (e) {
       return res.status(500).send(e);
     }
@@ -93,7 +74,7 @@ module.exports = (app) => {
         { verified: 1 },
         { new: true },
         (err, user) => {
-          if (err) return res.status(401).json({ success: false, err });
+          if (err) return res.status(401).send(err);
           return res.status(200).json({ data: user, success: true });
         }
       );

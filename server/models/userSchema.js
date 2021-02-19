@@ -1,31 +1,22 @@
 //contains the user data as stored in the DB
 const monogoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const SALT = 10;
-
 require("dotenv").config;
+
+const SALT = 10;
 
 const userSchema = monogoose.Schema({
   username: String,
-  email: String,
-  password: {
-    type: String,
-    minLength: 8,
-  },
-  phone: {
-    type: Number,
-    minLength: 10,
-    maxLength: 14,
-  },
+  email: { type: String, unique: 1 },
+  password: { type: String, minLength: 8 },
+  phone: { type: Number, minLength: 10, maxLength: 14, unique: 1 },
   firstName: String,
   lastName: String,
   dob: String,
   lastLogin: Number,
   device: String,
-  verified: {
-    type: Boolean,
-    default: 0,
-  },
+  token: String,
+  verified: { type: Boolean, default: 0 },
 });
 
 userSchema.pre("save", function (next) {
@@ -40,6 +31,5 @@ userSchema.pre("save", function (next) {
     });
   });
 });
-
 
 monogoose.model("users", userSchema);
