@@ -1,9 +1,12 @@
-function CreditCard() {
+
+
+function CreditCard({ size, padding }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
+      style={{ width: size, height: size, padding: padding }}
       stroke="currentColor"
     >
       <path
@@ -14,6 +17,11 @@ function CreditCard() {
       />
     </svg>
   );
+}
+
+CreditCard.defaultProps = {
+  size: 24,
+  padding: 5
 }
 
 export default CreditCard;

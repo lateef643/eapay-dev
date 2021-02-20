@@ -1,10 +1,12 @@
-function CameraIcon() {
+function CameraIcon({ size, padding }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
+      style={{ width: size, height: size, padding: padding }}
       stroke="currentColor"
+   
     >
       <path
         strokeLinecap="round"
@@ -20,6 +22,11 @@ function CameraIcon() {
       />
     </svg>
   );
+}
+
+CameraIcon.defaultProps = {
+  size: 24,
+  padding: 5
 }
 
 export default CameraIcon;
