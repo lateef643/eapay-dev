@@ -11,7 +11,6 @@ const Merchant = mongoose.model("merchants");
 
 const emailCheck = require("../utils/checkEmail");
 const twilio = require("../utils/twilio");
-const func = require("../utils/func");
 
 const merchantVerify = require("../middleware/merchantVerify");
 const updateMerchant = require("../middleware/updateMerchant");
@@ -89,7 +88,7 @@ module.exports = (app) => {
     const { email, password } = req.body;
     const isEmail = emailCheck(email);
     let obj = {};
-     if (isEmail) {
+    if (isEmail) {
       obj = { email };
     } else {
       const phone = email.length === 11 ? email.replace("0", "+234") : email;
@@ -169,7 +168,8 @@ module.exports = (app) => {
         },
       };
       request(options, (err, response) => {
-        if (func.objectSize(response.body) > 100) {
+        const resp = JSON.parse(response.body);
+        if (resp.status) {
           Merchant.findByIdAndUpdate(
             { _id: req.user._id },
             { $set: req.body },
@@ -180,11 +180,7 @@ module.exports = (app) => {
             }
           );
         } else {
-          return res
-            .status(401)
-            .send(
-              "Could not resolve account name. Check parameters or try again."
-            );
+          return res.status(401).send(resp.message);
         }
       });
     }
@@ -206,4 +202,11 @@ module.exports = (app) => {
       );
     }
   );
+
+  app.get("/", (req, res) => {
+    const QRCode = require("qrcode");
+    QRCode.toFile("/logo.png", "I am a pony!", function (err) {
+      console.log(err);
+    });
+  });
 };
