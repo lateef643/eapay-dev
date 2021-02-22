@@ -4,6 +4,7 @@ const userAgent = require("useragent");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 const formidable = require("express-formidable");
+const QRCode = require("qrcode");
 
 userAgent(true);
 
@@ -160,6 +161,7 @@ module.exports = (app) => {
     updateMerchant,
     (req, res) => {
       const { accNumber, bank } = req.body;
+      const body = req.body;
       let options = {
         method: "GET",
         url: `https://api.paystack.co/bank/resolve?account_number=${accNumber}&bank_code=${bank}`,
@@ -170,15 +172,19 @@ module.exports = (app) => {
       request(options, (err, response) => {
         const resp = JSON.parse(response.body);
         if (resp.status) {
-          Merchant.findByIdAndUpdate(
-            { _id: req.user._id },
-            { $set: req.body },
-            { new: true },
-            (err, doc) => {
-              if (err) return res.status(401).send(err);
-              return res.status(200).json({ success: true, doc });
-            }
-          );
+          const qrImg = [{ body }];
+          QRCode.toDataURL(qrImg, function (err, url) {
+            //access the qrcode with <img src=qrcodeurl />
+            Merchant.findByIdAndUpdate(
+              { _id: req.user._id },
+              { $set: req.body, qrcodeUrl: url },
+              { new: true },
+              (err, doc) => {
+                if (err) return res.status(401).send(err);
+                return res.status(200).json({ success: true, doc });
+              }
+            );
+          });
         } else {
           return res.status(401).send(resp.message);
         }
@@ -202,11 +208,4 @@ module.exports = (app) => {
       );
     }
   );
-
-  app.get("/", (req, res) => {
-    const QRCode = require("qrcode");
-    QRCode.toFile("/logo.png", "I am a pony!", function (err) {
-      console.log(err);
-    });
-  });
 };

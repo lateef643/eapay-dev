@@ -27,6 +27,7 @@ const merchantSchema = monogoose.Schema({
   token: String,
   lastLogin: Number,
   device: [String],
+  qrcodeUrl:String,
   verified: { type: Boolean, default: 0 },
   lockUntil: { type: Number, default: 0 },
   loginAttempt: { type: Number, default: 0 },
