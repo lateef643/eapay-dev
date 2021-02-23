@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 require("dotenv").config();
 const app = express();
 const cors = require("cors");
@@ -20,8 +19,7 @@ console.log(
   `${mongoose.connection.readyState}-connected to database sucessfully with value of 2`
 );
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 app.use(cookieParser());
 
 //route usage

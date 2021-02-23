@@ -21,16 +21,17 @@ module.exports = (app) => {
       },
     };
     request(options, (error, response) => {
-      if (response.body.status) {
-        if (response.body.data.formatted_dob === dob) {
-          let phone = response.body.data.mobile.replace("0", "+234");
+      const resp = JSON.parse(response.body);
+      if (resp.status) {
+        if (resp.data.formatted_dob === dob) {
+          let phone = resp.data.mobile.replace("0", "+234");
           const data = new User({
             email,
             password,
-            firstname: response.body.data.first_name,
-            lastname: response.body.data.last_name,
+            firstname: resp.data.first_name,
+            lastname: resp.data.last_name,
             phone,
-            dob: response.body.data.formatted_dob,
+            dob: resp.data.formatted_dob,
           });
           try {
             twilio.twilioVerify(phone);

@@ -4,6 +4,7 @@ const userAgent = require("useragent");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 const formidable = require("express-formidable");
+const QRCode = require("qrcode");
 
 userAgent(true);
 
@@ -11,7 +12,6 @@ const Merchant = mongoose.model("merchants");
 
 const emailCheck = require("../utils/checkEmail");
 const twilio = require("../utils/twilio");
-const func = require("../utils/func");
 
 const merchantVerify = require("../middleware/merchantVerify");
 const updateMerchant = require("../middleware/updateMerchant");
@@ -89,7 +89,7 @@ module.exports = (app) => {
     const { email, password } = req.body;
     const isEmail = emailCheck(email);
     let obj = {};
-     if (isEmail) {
+    if (isEmail) {
       obj = { email };
     } else {
       const phone = email.length === 11 ? email.replace("0", "+234") : email;
@@ -161,6 +161,7 @@ module.exports = (app) => {
     updateMerchant,
     (req, res) => {
       const { accNumber, bank } = req.body;
+      const body = req.body;
       let options = {
         method: "GET",
         url: `https://api.paystack.co/bank/resolve?account_number=${accNumber}&bank_code=${bank}`,
@@ -169,22 +170,23 @@ module.exports = (app) => {
         },
       };
       request(options, (err, response) => {
-        if (func.objectSize(response.body) > 100) {
-          Merchant.findByIdAndUpdate(
-            { _id: req.user._id },
-            { $set: req.body },
-            { new: true },
-            (err, doc) => {
-              if (err) return res.status(401).send(err);
-              return res.status(200).json({ success: true, doc });
-            }
-          );
-        } else {
-          return res
-            .status(401)
-            .send(
-              "Could not resolve account name. Check parameters or try again."
+        const resp = JSON.parse(response.body);
+        if (resp.status) {
+          const qrImg = [{ body }];
+          QRCode.toDataURL(qrImg, function (err, url) {
+            //access the qrcode with <img src=qrcodeurl />
+            Merchant.findByIdAndUpdate(
+              { _id: req.user._id },
+              { $set: req.body, qrcodeUrl: url },
+              { new: true },
+              (err, doc) => {
+                if (err) return res.status(401).send(err);
+                return res.status(200).json({ success: true, doc });
+              }
             );
+          });
+        } else {
+          return res.status(401).send(resp.message);
         }
       });
     }
