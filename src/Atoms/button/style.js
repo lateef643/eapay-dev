@@ -13,6 +13,8 @@ const styles = createUseStyles({
     fontWeight: 500,
     boxShadow: props.shadow,
     textTransform: "uppercase",
+
+    
     "&:focus": {
       border: 0,
       outline: 0,

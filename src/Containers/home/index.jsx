@@ -1,34 +1,29 @@
 import { Component } from 'react'
-import BottomNavigation from '../../Atoms/bottomNavigation';
-import Button from '../../Atoms/button'
-import Input from '../../Atoms/Input';
-import { CameraIcon, CartIcon, CreditCardIcon } from '../../Atoms/icons';
+import { ShoppingCartOutline, CreditCardOutline, Menu } from 'heroicons-react';
+
+import HomeView from '../../Presentations/home';
 
 class Home extends Component {
     state = {
         data: [
             {
-                icon: <CreditCardIcon size={25} padding={0} />,
-                name: 'Card'
+                icon: <ShoppingCartOutline size={25} />,
+                name: 'Product'
             },
             {
-                icon: <CartIcon padding={0} size={25} />,
-                name: 'Cart'
+                icon: <CreditCardOutline size={25} />,
+                name: 'Credit score'
             },
             {
-                icon: <CameraIcon size={25} padding={0} />,
-                name: 'Camera'
+                icon: <Menu size={25} />,
+                name: 'Transactions'
             }
         ]
     }
 
     render() {
         return (
-            <div style={{ height: '100vh' }}>
-            <BottomNavigation data={this.state.data} />
-            <Input label='Email' />
-            <Button label="Submit" />
-            </div>
+           <HomeView bottomLinks={this.state.data} />
         )
     }
 }

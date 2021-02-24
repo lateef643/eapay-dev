@@ -27,10 +27,11 @@ const useStyles = createUseStyles({
     fontFamily:"'Roboto', sans-serif",
     whiteSpace: 'nowrap',
     textDecoration: 'none',
-    fontSize: 13,
+    fontSize: 14,
     transition: 'background-color 0.1s ease-in-out',
+
     "&:hover":{
-      backgroundColor: '#588ac5'
+      color: '#588ac5'
     }
   },
   active: {
@@ -54,6 +55,10 @@ const BottomNavigation = ({ data }) => {
       }
     </nav>
   )
+}
+
+BottomNavigation.defaultProps = {
+  data: []
 }
 
 export default BottomNavigation;
