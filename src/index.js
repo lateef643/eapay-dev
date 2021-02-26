@@ -1,21 +1,49 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import Store from './Store';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Provider } from "react-redux";
+import Store from "./Store";
+import { ThemeProvider } from "react-jss";
+
+const theme = {
+  primaryColor: "#588ac5",
+  secondaryColor: "#2C4563",
+  fontText: "'Roboto', sans-serif",
+  textColor: "rgba(0, 0, 0, 0.4)",
+};
+
+const StoreComponent = () => {
+  return (
+    <Provider store={Store}>
+      <App />
+    </Provider>
+  );
+};
+
+const ThemeComponent = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <StoreComponent />
+    </ThemeProvider>
+  );
+};
+
+const RouterComponent = () => {
+  return (
+    <Router>
+      <ThemeComponent />
+    </Router>
+  );
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={Store}>
-      <Router>
-        <App />
-      </Router>
-    </Provider>
+    <RouterComponent />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,34 +1,36 @@
-import { useState } from 'react';
-import useStyles from './style';
+import useStyles from "./style";
 
-
-const FloatingInput = ({ type, placeholder, label, name, onChange, input }) => {
+const FloatingInput = ({
+  type,
+  placeholder,
+  label,
+  name,
+  input,
+  className,
+  inputClassName,
+  inputContainerClassName,
+  meta,
+}) => {
   const classes = useStyles();
-  const [isActive, setIsActive] = useState(false);
-
-  const handleTextChange = (e) => {
-    // onChange(e)
-    if (e.target.value !== '') {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }
-
   return (
-    <div className={classes.floatingLabelWrap}>
-      <input
-        {...input}
-        type={type}
-        name={name}
-        className={classes.input}
-        onChange={handleTextChange}
-        id={name}
-        placeholder={placeholder}
-      />
-      <label htmlFor={name} className={`${classes.label} ${isActive ? classes.active : ''}`}>
-        {label}
-      </label>
+    <div className={inputContainerClassName}>
+      <div className={`${classes.floatingLabelWrap}  ${className}`}>
+        <input
+          {...input}
+          type={type}
+          name={name}
+          className={`${classes.input}  ${inputClassName}`}
+          id={name}
+          placeholder={placeholder}
+        />
+        <label
+          htmlFor={name}
+          className={`${classes.label} ${meta.visited && input.value ? classes.active : ""}`}
+        >
+          {label}
+        </label>
+      </div>
+      {meta?.touched && meta?.error}
     </div>
   );
 };

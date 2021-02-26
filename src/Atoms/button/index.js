@@ -1,11 +1,11 @@
 import useStyles from "./style";
 import PropTypes from "prop-types";
 
-const Button = ({ label, icon, ...props }) => {
+const Button = ({ label, icon, className, ...props }) => {
   const classes = useStyles(props);
 
   return (
-    <button className={classes.button}>
+    <button className={`${classes.button} ${className}`}>
       {icon}
       {label}
     </button>

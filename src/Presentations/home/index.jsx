@@ -1,14 +1,28 @@
-import {
-  Container,
-  CssBaseline,
-} from "@material-ui/core";
+import { Container, CssBaseline } from "@material-ui/core";
 import { Fragment } from "react";
-import { createUseStyles } from "react-jss";
-import { CogOutline, UserAddOutline, LoginOutline } from "heroicons-react";
+import { createUseStyles, useTheme } from "react-jss";
+import {
+  CogOutline,
+  UserAddOutline,
+  LoginOutline,
+  ArrowLeft,
+  LibraryOutline,
+} from "heroicons-react";
 import { Vector, Logo } from "../../Assets/index";
 import BottomNavigation from "../../Atoms/bottomNavigation";
 import Drawer from "../../Atoms/drawer";
-import Button from "../../Atoms/button";
+import Login from "./component/login";
+import Register from "./component/register";
+import Verification from "./component/verification";
+import Bank from "./component/bank";
+import {
+  VERIFICATION_PAGE,
+  LOGIN_PAGE,
+  REGISTER_PAGE,
+  WALLET_PAGE,
+  BANK_PAGE,
+  LOGIN_AND_REGISTER_PAGE,
+} from "../../Utils/constant";
 
 const useStyles = createUseStyles({
   container: {},
@@ -34,38 +48,72 @@ const useStyles = createUseStyles({
   },
   textHeader: {
     fontSize: 18,
-    marginLeft: 10
+    marginLeft: 10,
+    display: "inline",
   },
   ul: {
-    listStyle: 'none',
-    padding: '0 12px',
-    marginTop: 0
+    listStyle: "none",
+    padding: "0 12px",
+    marginTop: 0,
   },
   li: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     height: 51,
-    boxSizing: 'border-box',
+    boxSizing: "border-box",
     borderRadius: 6,
     paddingLeft: 9,
     fontWeight: 300,
     paddingRight: 5,
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: ({ theme }) => theme.fontText,
 
-    '& span': {
+    "& span": {
       marginLeft: 15,
-      fontSize: 18
-    }
+      fontSize: 18,
+    },
+    "&:hover": {
+      border: "1px solid rgba(196, 196, 196, 0.18)",
+      backgroundColor: ({ theme }) => theme.primaryColor,
+      color: "white",
+    },
   },
-  activeList: {
-    border: '1px solid rgba(196, 196, 196, 0.18)',
-    backgroundColor: '#588ac5',
-    color: 'white'
-  }
 });
 
-const Home = ({ bottomLinks }) => {
-  const classes = useStyles();
+const Home = ({
+  auth,
+  page,
+  onAuth,
+  onOpen,
+  bottomLinks,
+  onBankSubmit,
+  onLoginSubmit,
+  onRegisterSubmit,
+  onVerificationSubmit,
+  ...props
+}) => {
+  const theme = useTheme();
+  const classes = useStyles({ ...props, theme });
+  const routeLink = (
+    <ul className={classes.ul}>
+      <li onClick={() => onAuth(REGISTER_PAGE)} className={classes.li}>
+        <UserAddOutline />
+        <span>Register</span>
+      </li>
+      <li onClick={() => onAuth(LOGIN_PAGE)} className={`${classes.li}`}>
+        <LoginOutline />
+        <span>Login</span>
+      </li>
+    </ul>
+  );
+  const walletLink = (
+    <ul className={classes.ul}>
+      <li onClick={() => onAuth(BANK_PAGE)} className={classes.li}>
+        <LibraryOutline />
+        <span>Bank</span>
+      </li>
+    </ul>
+  );
+
   return (
     <Fragment>
       <CssBaseline />
@@ -77,18 +125,50 @@ const Home = ({ bottomLinks }) => {
         </div>
       </Container>
       <BottomNavigation data={bottomLinks} />
-      <Drawer open={true}>
-        <p className={classes.textHeader}>Welcome</p>
-        <ul className={classes.ul}>
-          <li className={classes.li}>
-            <UserAddOutline />
-            <span>Register</span>
-          </li>
-          <li className={`${classes.li} ${classes.activeList}`}>
-            <LoginOutline />
-            <span>Login</span>
-          </li>
-        </ul>
+      <Drawer onClos={() => {}} onOpen={onOpen} open={auth}>
+        <div style={{ display: "flex", alignItems: "center", paddingLeft: 18 }}>
+          {" "}
+          {page === LOGIN_PAGE ? (
+            <>
+              <ArrowLeft onClick={() => onAuth(LOGIN_AND_REGISTER_PAGE)} />
+              <p className={classes.textHeader}>Login</p>
+            </>
+          ) : page === REGISTER_PAGE ? (
+            <>
+              <ArrowLeft onClick={() => onAuth(LOGIN_AND_REGISTER_PAGE)} />
+              <p className={classes.textHeader}>Create Account</p>
+            </>
+          ) : page === VERIFICATION_PAGE ? (
+            <>
+              <p className={classes.textHeader}>Verification</p>
+            </>
+          ) : page === WALLET_PAGE ? (
+            <>
+              <p className={classes.textHeader}>Wallet</p>
+            </>
+          ) : page === BANK_PAGE ? (
+            <>
+              <p className={classes.textHeader}>Add bank account</p>
+            </>
+          ) : (
+            <>
+              <p className={classes.textHeader}>Welcome</p>
+            </>
+          )}
+        </div>
+        {page === LOGIN_PAGE ? (
+          <Login onAuth={onAuth} onSubmit={onLoginSubmit} />
+        ) : page === REGISTER_PAGE ? (
+          <Register onAuth={onAuth} onSubmit={onRegisterSubmit} />
+        ) : page === VERIFICATION_PAGE ? (
+          <Verification onSubmit={onVerificationSubmit} />
+        ) : page === WALLET_PAGE ? (
+          walletLink
+        ) : page === BANK_PAGE ? (
+          <Bank onSubmit={onBankSubmit} />
+        ) : (
+          routeLink
+        )}
       </Drawer>
     </Fragment>
   );

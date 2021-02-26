@@ -1,1 +1,1 @@
-export const BASEURL = '';
+export const BASEURL = 'https://eapay-test-development.herokuapp.com';
