@@ -75,7 +75,7 @@ const mapDispatchToProps = (dispatch) => {
     onLoginAction: async (data) => {
       try {
         const res = await request({
-          url: '/',
+          url: '/user/login',
           method: 'POST',
           data,
         });
@@ -93,7 +93,7 @@ const mapDispatchToProps = (dispatch) => {
           method: 'POST',
           data,
         });
-
+        console.log(res.data)
         dispatch({ type: ADDUSERDETAILS, payload: res.data })
         return res
       } catch (error) {
