@@ -53,11 +53,11 @@ app.use(vhost(process.env.DOMAIN, landingPage));
 app.use(vhost(`mobile.${process.env.DOMAIN}`, mobile));
 app.use(vhost(`merchant.${process.env.DOMAIN}`, merchant));
 app.use(vhost(`admin.eapay.${process.env.DOMAIN}`, admin));
-app.use(vhost(`api.${process.env.DOMAIN}`, app));
+app.use(vhost(`api.${process.env.DOMAIN}`, api));
 
 //route usage
-require("./routes/userRoute")(app);
-require("./routes/merchantRoute")(app);
+require("./routes/userRoute")(api);
+require("./routes/merchantRoute")(api);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
