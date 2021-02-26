@@ -29,23 +29,23 @@ console.log(
 app.use(express.json())
 app.use(cookieParser());
 
-landingPage.use(express.static(path.join(__dirname, "views/index/build")));
-mobile.use(express.static(path.join(__dirname, "views/mobile/build")));
-merchant.use(express.static(path.join(__dirname, "views/merchant/build")));
-admin.use(express.static(path.join(__dirname, "views/admin/build")));
+landingPage.use(express.static(path.join(__dirname, "views/index")));
+mobile.use(express.static(path.join(__dirname, "views/mobile")));
+merchant.use(express.static(path.join(__dirname, "views/merchant")));
+admin.use(express.static(path.join(__dirname, "views/admin")));
 
 // View route
 landingPage.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/index/build", "index.html"));
+  res.sendFile(path.join(__dirname, "views/index", "index.html"));
 });
 mobile.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/mobile/build", "index.html"));
+  res.sendFile(path.join(__dirname, "views/mobile", "index.html"));
 });
 merchant.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/merchant/build", "index.html"));
+  res.sendFile(path.join(__dirname, "views/merchant", "index.html"));
 });
 admin.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/admin/build", "index.html"));
+  res.sendFile(path.join(__dirname, "views/admin", "index.html"));
 });
 
 // vhost usage
