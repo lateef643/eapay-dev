@@ -33,6 +33,7 @@
     "request": "^2.88.2",
     "twilio": "^3.55.1",
     "useragent": "^2.3.0",
+    "vhost": "^3.0.2",
     "yamlparser": "0.0.2"
   }
 }
