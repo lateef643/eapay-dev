@@ -22,11 +22,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-module.exports = (app) => {
+module.exports = (api) => {
   //the merchant register route accept email and password
   //the route will  process if user phone number is entered
   //it returns the error with the error msg as json and success with the merchant data
-  app.post("/api/merchant/register", (req, res) => {
+  api.post("/api/merchant/register", (req, res) => {
     const { email, password } = req.body;
     let agent = userAgent.parse(req.headers["user-agent"]);
     let device = [];
@@ -51,7 +51,7 @@ module.exports = (app) => {
   //this is the route that receive the otp verificationn from phone
   ///api/merchant/verify?id=${id} url format
   //it returns the updated verification, logn date and new device state of the user
-  app.post("/api/merchant/verify", async (req, res) => {
+  api.post("/api/merchant/verify", async (req, res) => {
     let agent = userAgent.parse(req.headers["user-agent"]);
     let device = agent.toString();
     const code = req.body.code;
@@ -85,7 +85,7 @@ module.exports = (app) => {
   //accept same parameter as the register route
   //returns error with error msg and lock the acct after five succesive wrong password for 30 mins
   //on sucess returns the merchants data
-  app.post("/api/merchant/login", (req, res) => {
+  api.post("/api/merchant/login", (req, res) => {
     const { email, password } = req.body;
     const isEmail = emailCheck(email);
     let obj = {};
@@ -123,14 +123,14 @@ module.exports = (app) => {
   });
 
   //this check the authentication and verification state of the merchant
-  app.get("/api/merchant/auth", merchantVerify, updateMerchant, (req, res) => {
+  api.get("/api/merchant/auth", merchantVerify, updateMerchant, (req, res) => {
     res.status(200).json({ success: true, isMerchant: true });
   });
 
   //route to upload the doc using cloudinary
   //the upload image must be named FILE
   //the url gotten from cloudinary is updated in the db
-  app.post(
+  api.post(
     "/api/merchant/doc_upload",
     merchantVerify,
     updateMerchant,
@@ -155,7 +155,7 @@ module.exports = (app) => {
 
   //this upsate the profile of the merchant,
   //it checks the account number befire perfoming the update
-  app.post(
+  api.post(
     "/api/merchant/profile",
     merchantVerify,
     updateMerchant,
@@ -193,7 +193,7 @@ module.exports = (app) => {
   );
 
   //on success log the user outand reset token
-  app.get(
+  api.get(
     "/api/merchant/logout",
     merchantVerify,
     updateMerchant,

@@ -7,9 +7,9 @@ const twilio = require("../utils/twilio");
 
 const User = mongoose.model("users");
 
-module.exports = (app) => {
+module.exports = (api) => {
   //register route which accept bvn, email,date of birth and password
-  app.post("/api/user/register", (req, res) => {
+  api.post("/api/user/register", (req, res) => {
     let { bvn, email, dob, password } = req.body;
     //the formtted date of birth shoulf be in YYYY-MM-DD
 
@@ -56,7 +56,7 @@ module.exports = (app) => {
   //accept user id as url  query params
   //this is the route that receive the otp verificationn from phone
   ///api/verify?id=${id} url format
-  app.post("/api/user/verify", async (req, res) => {
+  api.post("/api/user/verify", async (req, res) => {
     const code = req.body.code;
     const phone =
       req.body.phone.length === 11
