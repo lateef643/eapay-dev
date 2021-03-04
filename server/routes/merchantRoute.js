@@ -51,9 +51,22 @@ module.exports = (app) => {
         if (err) return res.json(err);
         let accNumber = data[0].accNumber + 1;
         const merchant = new Merchant(obj, accNumber);
-        merchant.save((err, doc) => {
+        merchant.save((err, merchants) => {
           if (err) return res.json(err);
-          res.status(200).json({ success: true, doc });
+          res.status(200).json({
+            success: true,
+            merchant: {
+              name: merchants.fullname,
+              email: merchants.email,
+              phone: merchants.phone,
+              newDevice: merchants.newDevice,
+              token: merchants.token,
+              _id: merchants._id,
+              verified: merchants.verified,
+              lockUntil: merchants.lockUntil,
+              loginAttempt: merchants.loginAttempt,
+            },
+          });
         });
       });
   });
@@ -91,9 +104,9 @@ module.exports = (app) => {
           $push: { device: device },
         },
         { new: true },
-        (err, merchant) => {
+        (err) => {
           if (err) return res.json(err);
-          return res.status(200).json({ success: true, merchant });
+          return res.status(200).json({ success: true });
         }
       );
     }
@@ -124,7 +137,20 @@ module.exports = (app) => {
           return res
             .cookie("eapay", merchants.token)
             .status(200)
-            .json({ success: true, merchants });
+            .json({
+              success: true,
+              merchant: {
+                name: merchants.fullname,
+                email: merchants.email,
+                phone: merchants.phone,
+                newDevice: merchants.newDevice,
+                token: merchants.token,
+                _id: merchants._id,
+                verified: merchants.verified,
+                lockUntil: merchants.lockUntil,
+                loginAttempt: merchants.loginAttempt,
+              },
+            });
         });
       }
       let reason = Merchant.failedLogin;
@@ -202,9 +228,22 @@ module.exports = (app) => {
               { _id: req.user._id },
               { $set: req.body, qrcodeUrl: url },
               { new: true },
-              (err, doc) => {
+              (err, merchants) => {
                 if (err) return res.json(err);
-                return res.status(200).json({ success: true, doc });
+                return res.status(200).json({
+                  success: true,
+                  merchant: {
+                    name: merchants.fullname,
+                    email: merchants.email,
+                    phone: merchants.phone,
+                    newDevice: merchants.newDevice,
+                    token: merchants.token,
+                    _id: merchants._id,
+                    verified: merchants.verified,
+                    lockUntil: merchants.lockUntil,
+                    loginAttempt: merchants.loginAttempt,
+                  },
+                });
               }
             );
           });
