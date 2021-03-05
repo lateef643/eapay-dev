@@ -9,6 +9,9 @@ import { ADDUSERDETAILS } from '../../Store/action-types';
 import HomeView from "../../Presentations/home";
 import wizardAuth from "../../hoc/wizardAuth";
 
+
+const convertDataToJSON = value => JSON.stringify(value);
+
 class Home extends Component {
   state = {
     data: [
@@ -29,13 +32,15 @@ class Home extends Component {
   };
 
   handleRegisterSubmit = async (values) => {
-    const response = await this.props.onRegisterAction(values)
+    let data = await convertDataToJSON(values);
+    const response = await this.props.onRegisterAction(data)
 
     if( response ) this.props.onVerificationRoute(VERIFICATION_PAGE)
   };
 
-  handleLoginSubmit = (values) => {
-    console.log(values);
+  handleLoginSubmit = async (values) => {
+    let data = await convertDataToJSON(values)
+    await this.props.onLoginAction(data)
   };
 
   componentDidMount() {
@@ -81,6 +86,8 @@ const mapDispatchToProps = (dispatch) => {
         });
 
         dispatch({ type: ADDUSERDETAILS, payload: res.data })
+
+        
       } catch (error) {
         console.log(error)
       }
@@ -91,6 +98,9 @@ const mapDispatchToProps = (dispatch) => {
         const res = await request({
           url: '/user/register',
           method: 'POST',
+          headers: {
+            "content-type": "application/json"
+          },
           data,
         });
         console.log(res.data)

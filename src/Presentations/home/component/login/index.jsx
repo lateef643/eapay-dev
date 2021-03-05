@@ -61,7 +61,7 @@ const LoginView = ({ page, onAuth, handleSubmit, ...props }) => {
         <Field
           label="Email or Phone"
           type="text"
-          name="username"
+          name="email"
           component={Input}
           inputContainerClassName={classes.inputContainer}
         />

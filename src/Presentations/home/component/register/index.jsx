@@ -62,7 +62,7 @@ const RegisterView = ({ page, handleSubmit, onAuth, ...props }) => {
           label="Email or Phone"
           type="email"
           required
-          name="username"
+          name="email"
           component={Input}
           inputContainerClassName={classes.inputContainer}
         />

@@ -1,1 +1,1 @@
-export const BASEURL = 'https://api.eapay.website';
+export const BASEURL = 'http://api.eapay.website';

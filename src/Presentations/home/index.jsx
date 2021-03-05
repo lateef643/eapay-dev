@@ -49,6 +49,7 @@ const useStyles = createUseStyles({
   textHeader: {
     fontSize: 18,
     marginLeft: 10,
+    fontWeight: 300,
     display: "inline",
   },
   ul: {
@@ -63,7 +64,7 @@ const useStyles = createUseStyles({
     boxSizing: "border-box",
     borderRadius: 6,
     paddingLeft: 9,
-    fontWeight: 300,
+    fontWeight: 400,
     paddingRight: 5,
     fontFamily: ({ theme }) => theme.fontText,
 
