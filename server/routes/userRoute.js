@@ -38,17 +38,30 @@ module.exports = (api) => {
             data.save((err, user) => {
               if (err) return res.status(401).send("Cant save user");
               //user data has been successfully stored in db, the user should be expecting OTP
-              res.status(200).json({ data: user, success: true });
+              res.status(200).json({
+                user: {
+                  name: user.fullname,
+                  email: user.email,
+                  phone: user.phone,
+                  _id: user._id,
+                  newDevice: user.newDevice,
+                  token: user.token,
+                  verified: user.verified,
+                  lockUntil: user.lockUntil,
+                  loginAttempt: user.loginAttempt,
+                },
+                success: true,
+              });
             });
           } catch (error) {
-            return res.status(401).send("Error sending sms");
+            return res.json("Error sending sms");
           }
         } else {
           //DOB did not match
-          return res.status(401).send("Information Miss match");
+          return res.json("Information Miss match");
         }
       } else {
-        return res.status(401).send("Invalid BVN");
+        return res.json("Invalid BVN");
       }
     });
   });
@@ -74,9 +87,9 @@ module.exports = (api) => {
         { _id: id },
         { verified: 1 },
         { new: true },
-        (err, user) => {
+        (err) => {
           if (err) return res.status(401).send(err);
-          return res.status(200).json({ data: user, success: true });
+          return res.status(200).json({ success: true });
         }
       );
     }

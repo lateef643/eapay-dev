@@ -6,7 +6,7 @@ require("dotenv").config;
 const twilio = require("../utils/twilio");
 
 const MAX_LOGIN = 5;
-const LOCK_UNTIL = 0.5 * 60 * 60 * 1000; //loxk the user out after 5consecutive failed login attempt
+const LOCK_UNTIL = 0.5 * 60 * 60 * 1000; //lock the user out after 5consecutive failed login attempt
 const SALT = 10;
 
 const merchantSchema = monogoose.Schema({
@@ -27,6 +27,7 @@ const merchantSchema = monogoose.Schema({
   token: String,
   lastLogin: Number,
   device: [String],
+  newDevice: Boolean,
   qrcodeUrl:String,
   verified: { type: Boolean, default: 0 },
   lockUntil: { type: Number, default: 0 },
@@ -106,17 +107,16 @@ merchantSchema.statics.loginMerchant = function (obj, password, device, cb) {
             //check if its email before sending
             twilio.twilioVerify(phone);
             var updates = {
-              $set: { loginAttempt: 1 },
+              $set: { loginAttempt: 1, newDevice: true },
               $unset: { lockUntil: 1 },
             };
             return merchant.update(updates, function (err) {
               if (err) return cb(err);
-              // return cb(null, null, 3); //  VERIFY_OTP: 3
               return cb(null, merchant);
             });
           }
           var updates = {
-            $set: { loginAttempt: 1, lastLogin: Date.now() },
+            $set: { loginAttempt: 1, lastLogin: Date.now(), newDevice: false },
             $unset: { lockUntil: 1 },
           };
           return merchant.update(updates, function (err) {
