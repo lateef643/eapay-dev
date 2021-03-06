@@ -40,7 +40,7 @@ module.exports = (app) => {
               //user data has been successfully stored in db, the user should be expecting OTP
               res.status(200).json({
                 user: {
-                  name: user.fullname,
+                  name: `${user.lastname} ${user.firstname}`,
                   email: user.email,
                   phone: user.phone,
                   _id: user._id,
