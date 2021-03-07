@@ -4,19 +4,23 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config;
 
 const SALT = 10;
+const MAX_LOGIN = 5;
+const LOCK_UNTIL = 0.5 * 60 * 60 * 1000; //lock the user out after 5consecutive failed login attempt
 
 const userSchema = monogoose.Schema({
   username: String,
   email: { type: String, unique: 1 },
   password: { type: String, minLength: 8 },
   phone: { type: Number, minLength: 10, maxLength: 14, unique: 1 },
-  firstName: String,
-  lastName: String,
+  fullname: String,
   dob: String,
   lastLogin: Number,
   device: String,
+  newDevice: Boolean,
   token: String,
   verified: { type: Boolean, default: 0 },
+  lockUntil: { type: Number, default: 0 },
+  loginAttempt: { type: Number, default: 0 },
 });
 
 userSchema.pre("save", function (next) {
