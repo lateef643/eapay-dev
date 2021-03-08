@@ -4,8 +4,6 @@ const userAgent = require("useragent");
 const twilio = require("../utils/twilio");
 
 module.exports = (req, res, next) => {
-  let agent = userAgent.parse(req.headers["user-agent"]);
-  device = agent.toString();
   let newlogin = 7 * 24 * 60 * 60 * 1000; //after seven days
   Merchant.findOne({ _id: req.user.id }, (err, user) => {
     if (err) throw err;
@@ -14,14 +12,13 @@ module.exports = (req, res, next) => {
         ? user.phone.toString().replace("2", "+2")
         : user.phone
       : user.email;
-
     if (
       !user.verified ||
-      user.device != device ||
+      user.newDevice ||
       Date.now() > user.lastLogin + newlogin
     ) {
-      twilio.twilioVerify(phone);
-      return res.send("Please Verify your account");
+      // twilio.twilioVerify(phone);
+      return res.json({ error: true, verify: "Please Verify your account" });
     }
     next();
   });
