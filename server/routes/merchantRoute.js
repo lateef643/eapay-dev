@@ -73,16 +73,17 @@ module.exports = (app) => {
 
   //accept merchant id as url  query params
   //this is the route that receive the otp verificationn from phone
-  ///api/merchant/verify?id=${id} url format
+  ///api/merchant/verify?id=${id}&verify=${newDevice} url format
+  //$id=object id of the user and
+  //$newDevice=device state of the user either true or false
   //it returns the updated verification, logn date and new device state of the user
   app.post("/api/merchant/verify", async (req, res) => {
-    let agent = userAgent.parse(req.headers["user-agent"]);
-    let device = agent.toString();
     const code = req.body.code;
     if (
       utilsFunction.checkBody(code) ||
       utilsFunction.checkBody(req.body.phone) ||
-      utilsFunction.checkBody(req.query.id)
+      utilsFunction.checkBody(req.query.id) ||
+      utilsFunction.checkBody(req.query.verify)
     )
       return res.json("Invalid Parameter");
     const phone =
@@ -97,18 +98,32 @@ module.exports = (app) => {
       return res.json(e);
     }
     if (verificationResult.status === "approved") {
-      Merchant.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: { verified: 1, lastLogin: Date.now() },
-          $push: { device: device },
-        },
-        { new: true },
-        (err) => {
-          if (err) return res.json(err);
-          return res.status(200).json({ success: true });
-        }
-      );
+      if (req.query.verify) {
+        Merchant.findByIdAndUpdate(
+          { _id: id },
+          {
+            $set: { verified: 1, lastLogin: Date.now() },
+          },
+          { new: true },
+          (err) => {
+            if (err) return res.json(err);
+            return res.status(200).json({ success: true });
+          }
+        );
+      } else {
+        Merchant.findByIdAndUpdate(
+          { _id: id },
+          {
+            $set: { verified: 1, lastLogin: Date.now() },
+            $push: { device: device },
+          },
+          { new: true },
+          (err) => {
+            if (err) return res.json(err);
+            return res.status(200).json({ success: true });
+          }
+        );
+      }
     }
   });
 
