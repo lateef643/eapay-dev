@@ -1,7 +1,9 @@
 import { ADDUSERDETAILS } from "../action-types";
 
 const initialState = {
-  user: {},
+  user: {
+    // token: 'hyyhh'
+  },
   isloading: false,
 };
 
