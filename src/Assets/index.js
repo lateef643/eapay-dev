@@ -1,3 +1,4 @@
-import backgroundImage from "./backgroundmobileheader.png";
+import Vector from "./backgroundmobileheader.png";
+import Logo from './logo.png';
 
-export { backgroundImage };
+export { Vector, Logo };

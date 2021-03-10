@@ -2,8 +2,8 @@ import Axios from "axios";
 import PropTypes from "prop-types";
 import axiosRetry from "axios-retry";
 
-import localStorage from "./localStorage
-import { BASEURL } from "./variables
+import localStorage from "./localStorage"
+import { BASEURL } from "./variables"
 
 const axios = Axios.create();
 const baseUrl = BASEURL;
@@ -40,7 +40,7 @@ const request = async ({ url, method, params, data, headers, token }) => {
   //   }
 
   const result = await axios({
-    url: baseUrl + url,
+    url: baseUrl + '/api' + url,
     ...config,
   });
 
