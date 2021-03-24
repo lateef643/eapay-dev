@@ -2,12 +2,12 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import { ShoppingCartOutline, CreditCardOutline, Menu } from "heroicons-react";
 
-import request from '../../Utils/request';
-import { LOGIN_PAGE, REGISTER_PAGE, VERIFICATION_PAGE, WALLET_PAGE } from '../../Utils/constant';
-import { ADDUSERDETAILS } from '../../Store/action-types';
+import request from '../../utils/request';
+import { VERIFICATION_PAGE} from '../../utils/constant';
+import { ADDUSERDETAILS } from '../../store/action-types';
 
-import HomeView from "../../Presentations/home";
-import wizardAuth from "../../hoc/wizardAuth";
+import HomeView from "../../presentations/home";
+import pageWizard from "../../HOC/pageWizard";
 
 
 const convertDataToJSON = value => JSON.stringify(value);
@@ -35,7 +35,7 @@ class Home extends Component {
     let data = await convertDataToJSON(values);
     const response = await this.props.onRegisterAction(data)
 
-    if( response ) this.props.onVerificationRoute(VERIFICATION_PAGE)
+    if( response ) this.props.onPage(VERIFICATION_PAGE)
   };
 
   handleLoginSubmit = async (values) => {
@@ -52,13 +52,13 @@ class Home extends Component {
   render() {
     const {
       state: { auth },
-      props: { page, onAuth },
+      props: { page, onPage },
       handleRegisterSubmit,
       handleLoginSubmit,
     } = this;
     return (
       <HomeView
-        onAuth={onAuth}
+        onPage={onPage}
         page={page}
         auth={auth}
         onLoginSubmit={handleLoginSubmit}
@@ -86,8 +86,6 @@ const mapDispatchToProps = (dispatch) => {
         });
 
         dispatch({ type: ADDUSERDETAILS, payload: res.data })
-
-        
       } catch (error) {
         console.log(error)
       }
@@ -121,6 +119,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const wrappedComponent = wizardAuth(Home);
+const wrappedComponent = pageWizard(Home);
 
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedComponent);
