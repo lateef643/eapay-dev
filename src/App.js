@@ -1,7 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-const Home = lazy(() => import("./Containers/home"));
+const Home = lazy(() => import("./containers/home"));
 
 
 function App() {

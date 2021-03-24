@@ -3,7 +3,7 @@ import { reduxForm, Field } from "redux-form";
 import { Container } from "@material-ui/core";
 
 import Input from "../../../../Atoms/Input";
-import { LOGIN_PAGE } from '../../../../Utils/constant';
+import { LOGIN_PAGE } from '../../../../utils/constant';
 import Button from "../../../../Atoms/button";
 
 const useStyles = createUseStyles((theme) => ({

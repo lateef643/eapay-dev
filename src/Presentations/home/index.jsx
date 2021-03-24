@@ -22,7 +22,7 @@ import {
   WALLET_PAGE,
   BANK_PAGE,
   LOGIN_AND_REGISTER_PAGE,
-} from "../../Utils/constant";
+} from "../../utils/constant";
 
 const useStyles = createUseStyles({
   container: {},
@@ -83,7 +83,7 @@ const useStyles = createUseStyles({
 const Home = ({
   auth,
   page,
-  onAuth,
+  onPage,
   onOpen,
   bottomLinks,
   onBankSubmit,
@@ -96,11 +96,11 @@ const Home = ({
   const classes = useStyles({ ...props, theme });
   const routeLink = (
     <ul className={classes.ul}>
-      <li onClick={() => onAuth(REGISTER_PAGE)} className={classes.li}>
+      <li onClick={() => onPage(REGISTER_PAGE)} className={classes.li}>
         <UserAddOutline />
         <span>Register</span>
       </li>
-      <li onClick={() => onAuth(LOGIN_PAGE)} className={`${classes.li}`}>
+      <li onClick={() => onPage(LOGIN_PAGE)} className={`${classes.li}`}>
         <LoginOutline />
         <span>Login</span>
       </li>
@@ -108,7 +108,7 @@ const Home = ({
   );
   const walletLink = (
     <ul className={classes.ul}>
-      <li onClick={() => onAuth(BANK_PAGE)} className={classes.li}>
+      <li onClick={() => onPage(BANK_PAGE)} className={classes.li}>
         <LibraryOutline />
         <span>Bank</span>
       </li>
@@ -131,12 +131,12 @@ const Home = ({
           {" "}
           {page === LOGIN_PAGE ? (
             <>
-              <ArrowLeft onClick={() => onAuth(LOGIN_AND_REGISTER_PAGE)} />
+              <ArrowLeft onClick={() => onPage(LOGIN_AND_REGISTER_PAGE)} />
               <p className={classes.textHeader}>Login</p>
             </>
           ) : page === REGISTER_PAGE ? (
             <>
-              <ArrowLeft onClick={() => onAuth(LOGIN_AND_REGISTER_PAGE)} />
+              <ArrowLeft onClick={() => onPage(LOGIN_AND_REGISTER_PAGE)} />
               <p className={classes.textHeader}>Create Account</p>
             </>
           ) : page === VERIFICATION_PAGE ? (
@@ -158,9 +158,9 @@ const Home = ({
           )}
         </div>
         {page === LOGIN_PAGE ? (
-          <Login onAuth={onAuth} onSubmit={onLoginSubmit} />
+          <Login onPage={onPage} onSubmit={onLoginSubmit} />
         ) : page === REGISTER_PAGE ? (
-          <Register onAuth={onAuth} onSubmit={onRegisterSubmit} />
+          <Register onPage={onPage} onSubmit={onRegisterSubmit} />
         ) : page === VERIFICATION_PAGE ? (
           <Verification onSubmit={onVerificationSubmit} />
         ) : page === WALLET_PAGE ? (

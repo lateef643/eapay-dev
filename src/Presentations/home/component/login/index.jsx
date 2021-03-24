@@ -4,7 +4,7 @@ import { Container } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
 
 import Input from "../../../../Atoms/Input";
-import { REGISTER_PAGE } from '../../../../Utils/constant';
+import { REGISTER_PAGE } from '../../../../utils/constant';
 import Button from "../../../../Atoms/button";
 
 const useStyles = createUseStyles((theme) => ({
