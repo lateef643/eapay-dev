@@ -15,7 +15,7 @@ const WizardAuth = (WrappedComponent) => {
 
     onAuthHandler(value) {
       this.setState({ page: value });
-    }
+    }5
 
     onVerificationRoute(value) {
       this.setState({ page: value });

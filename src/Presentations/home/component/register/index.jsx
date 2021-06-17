@@ -54,7 +54,7 @@ const RegisterView = ({ page, handleSubmit, onAuth, ...props }) => {
   return (
     <Container className={classes.container}>
       <p className={classes.headerText}>
-        Your BVN is not stored on our system, we only use it tp verify your
+        Your BVN is not stored on our system, we only use it to verify your
         identity.
       </p>
       <form onSubmit={handleSubmit}>

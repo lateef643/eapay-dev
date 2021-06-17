@@ -5,7 +5,7 @@ const Button = ({ label, icon, className, ...props }) => {
   const classes = useStyles(props);
 
   return (
-    <button className={`${classes.button} ${className}`}>
+    <button className={`${classes.button} ${className}`} {...props}>
       {icon}
       {label}
     </button>

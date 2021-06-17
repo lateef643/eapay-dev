@@ -47,7 +47,7 @@ const BottomNavigation = ({ data }) => {
     <nav className={classes.nav}>
       {
         data.map(item => (
-          <Link to='' className={classes.link}>
+          <Link to={item.to} className={classes.link}>
             {item.icon}
             <span className={classes.span}> {item.name} </span>
           </Link>

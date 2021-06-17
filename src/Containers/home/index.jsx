@@ -18,6 +18,7 @@ class Home extends Component {
       {
         icon: <ShoppingCartOutline size={25} />,
         name: "Product",
+        to: '/products'
       },
       {
         icon: <CreditCardOutline size={25} />,
@@ -28,7 +29,7 @@ class Home extends Component {
         name: "Transactions",
       },
     ],
-    auth: false,
+    auth: true,
   };
 
   handleRegisterSubmit = async (values) => {
@@ -45,7 +46,7 @@ class Home extends Component {
 
   componentDidMount() {
     if (this.props.user?.token === undefined) {
-      this.setState({ auth: true });
+      this.setState({ auth: false }); // TODO 
     }
   }
 
